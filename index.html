@@ -46,6 +46,14 @@
               <li><a href="#contact" class="nav-link">Contact</a></li>
             </ul>
           </nav>
+          <button id="theme-toggle" aria-label="Toggle dark mode" class="theme-toggle">
+            <span class="toggle-track">
+              <span class="toggle-thumb">
+                <svg class="icon-sun" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+                <svg class="icon-moon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79z"/></svg>
+              </span>
+            </span>
+          </button>
         </div>
       </div>
     </header>
@@ -272,7 +280,7 @@
                 <li>Developed and enhanced production-level features using NestJS, React, React Query, Postgres, and Twilio,
                   ensuring scalable and efficient web applications.</li>
                 <li>Designed and implemented communication systems, including incoming/outgoing calls and messaging, by
-                  integrating Twilio’s API for seamless user interactions.</li>
+                  integrating Twilio's API for seamless user interactions.</li>
                 <li>Optimized API performance and data processing, enabling efficient handling of 80,000+ data items in a single API
                   call through algorithmic improvements and database optimizations</li>
                 <li>Built and expanded core functionalities such as anonymous contact handling, contact notes, and real-time
@@ -298,7 +306,7 @@
               <ul class="experience-description">
                 <li>Contributed to the developing a Flexible Transaction Fee System for Fasset, implementing JWT authentication, Redis caching, and input validation using Sequelize ORM (PostgreSQL).</li>
                 <li>Gained expertise in MVC backend architecture.</li>
-                <li>Collaborated with Fasset’s national and international teams
+                <li>Collaborated with Fasset's national and international teams
                   during the fellowship.</li>
               </ul>
             </div>
@@ -733,6 +741,32 @@
             </div>
           </div>
 
+          <div class="certification-card">
+            <div class="certification-badge">
+              <img
+                src="images/remote-sensing-certificate.png"
+                alt="NASA Certification"
+              />
+            </div>
+            <div class="certification-details">
+              <h3 class="certification-title">
+                Fundamentals of Remote Sensing
+              </h3>
+              <p class="certification-issuer">
+                <i class="devicon-azuresqldatabase-plain"></i>NASA - National Aeronautics and Space Administration
+              </p>
+              <p class="certification-date">
+                <i class="far fa-calendar-alt"></i> June 2025
+              </p>
+              <!-- <a
+                href="https://www.datacamp.com/completed/statement-of-accomplishment/course/17b7f491137951725fcffb2d4120d53db20e9bc2"
+                target="_blank"
+                class="certification-link"
+                >View Certificate</a
+              > -->
+            </div>
+          </div>
+
          
 
         </div>
@@ -843,6 +877,45 @@
             header.classList.add("scrolled");
           } else {
             header.classList.remove("scrolled");
+          }
+        });
+
+        // Dark mode toggle logic
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const toggleThumb = document.querySelector('.toggle-thumb');
+        const sunSVG = `<svg class="icon-sun" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>`;
+        const moonSVG = `<svg class="icon-moon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79z"/></svg>`;
+
+        function setTheme(mode) {
+          if (mode === 'dark') {
+            document.body.classList.add('dark-mode');
+            themeToggleBtn.classList.add('dark');
+            toggleThumb.innerHTML = moonSVG;
+          } else {
+            document.body.classList.remove('dark-mode');
+            themeToggleBtn.classList.remove('dark');
+            toggleThumb.innerHTML = sunSVG;
+          }
+        }
+        // On load, check localStorage or system preference
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme) {
+          setTheme(savedTheme);
+        } else if (prefersDark) {
+          setTheme('dark');
+        } else {
+          setTheme('light');
+        }
+        themeToggleBtn.addEventListener('click', function () {
+          const isDark = document.body.classList.toggle('dark-mode');
+          if (isDark) {
+            localStorage.setItem('theme', 'dark');
+            themeToggleBtn.classList.add('dark');
+            toggleThumb.innerHTML = moonSVG;
+          } else {
+            localStorage.setItem('theme', 'light');
+            themeToggleBtn.classList.remove('dark');
+            toggleThumb.innerHTML = sunSVG;
           }
         });
       });
