@@ -661,6 +661,23 @@ header.scrolled {
   color: var(--accent);
   font-weight: 600;
   font-size: 0.95rem;
+  text-decoration: none;
+  transition: opacity var(--transition);
+}
+
+a.exp-company:hover {
+  opacity: 0.75;
+}
+
+.exp-location {
+  color: var(--text-muted);
+  font-weight: 400;
+  font-size: 0.85rem;
+  margin-left: 4px;
+}
+
+.exp-location::before {
+  content: "· ";
 }
 
 .exp-date {
