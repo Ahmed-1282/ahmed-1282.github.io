@@ -20,6 +20,7 @@
 </head>
 
 <body>
+  <script>document.body.classList.add('js-loaded');</script>
   <!-- Header -->
   <header id="header">
     <div class="container header-content">
@@ -801,12 +802,12 @@
       try {
         const saved = localStorage.getItem("theme");
         setTheme(saved || (prefersDark ? "dark" : "light"));
-      } catch { setTheme("light"); }
+      } catch (e) { setTheme("light"); }
 
       themeBtn.addEventListener("click", () => {
         const next = document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark";
         setTheme(next);
-        try { localStorage.setItem("theme", next); } catch { }
+        try { localStorage.setItem("theme", next); } catch (e) { }
       });
 
       // --- Typing Effect ---
