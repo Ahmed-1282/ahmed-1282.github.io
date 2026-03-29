@@ -752,7 +752,8 @@
     <button class="lightbox-next" aria-label="Next image"><i class="fas fa-chevron-right"></i></button>
     <div class="lightbox-content">
       <div class="lightbox-img-wrapper">
-        <img id="lightbox-img" src="" alt="" />
+        <div class="spinner" id="lightbox-spinner"></div>
+        <img id="lightbox-img" src="" alt="" class="loading" />
       </div>
     </div>
     <div class="lightbox-zoom-controls">
@@ -920,8 +921,12 @@
         document.body.style.overflow = "hidden";
       }
 
+      var lbSpinner = document.getElementById("lightbox-spinner");
+
       function showLbImage(idx) {
         lbIdx = idx;
+        lbImg.classList.add("loading");
+        lbSpinner.style.display = "block";
         lbImg.src = lbImages[idx];
         lbImg.alt = "Project image " + (idx + 1) + " of " + lbImages.length;
         lbCurrent.textContent = idx + 1;
@@ -929,7 +934,6 @@
         lbThumbs.querySelectorAll(".lightbox-thumb").forEach(function(t, i) {
           t.classList.toggle("active", i === idx);
         });
-        // resetZoom will fire on img load event
       }
 
       function closeLightbox() {
@@ -996,8 +1000,12 @@
         lbWrapper.scrollTop = 0;
       }
 
-      // Wait for image to load then fit
-      lbImg.addEventListener("load", resetZoom);
+      // Wait for image to load then fit and show
+      lbImg.addEventListener("load", function() {
+        resetZoom();
+        lbImg.classList.remove("loading");
+        lbSpinner.style.display = "none";
+      });
 
       // Zoom buttons
       document.getElementById("lb-zoom-in").addEventListener("click", function() { setZoom(zoom + zoomStep); });
