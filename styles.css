@@ -829,6 +829,231 @@ a.exp-company:hover {
   background: var(--accent-soft);
 }
 
+/* View Gallery Button */
+.btn-view-gallery {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 16px;
+  padding: 8px 16px;
+  font-family: var(--font);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--accent);
+  background: var(--accent-soft);
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all var(--transition);
+  text-decoration: none;
+}
+
+.btn-view-gallery:hover {
+  background: var(--accent);
+  color: white;
+  transform: translateY(-1px);
+}
+
+/* ========== Lightbox ========== */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+
+.lightbox.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.lightbox-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.92);
+  backdrop-filter: blur(10px);
+}
+
+.lightbox-close {
+  position: absolute;
+  top: 20px;
+  right: 24px;
+  width: 44px;
+  height: 44px;
+  border: none;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  border-radius: 50%;
+  font-size: 1.1rem;
+  cursor: pointer;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition);
+}
+
+.lightbox-close:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: rotate(90deg);
+}
+
+.lightbox-prev,
+.lightbox-next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 48px;
+  height: 48px;
+  border: none;
+  background: rgba(255, 255, 255, 0.08);
+  color: white;
+  border-radius: 50%;
+  font-size: 1.1rem;
+  cursor: pointer;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition);
+}
+
+.lightbox-prev { left: 20px; }
+.lightbox-next { right: 20px; }
+
+.lightbox-prev:hover,
+.lightbox-next:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.lightbox-content {
+  position: relative;
+  z-index: 5;
+  width: 90vw;
+  height: 70vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lightbox-img-wrapper {
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  display: flex;
+  position: relative;
+  cursor: grab;
+  -webkit-overflow-scrolling: touch;
+}
+
+.lightbox-img-wrapper:active {
+  cursor: grabbing;
+}
+
+.lightbox-img-wrapper img {
+  display: block;
+  margin: auto;
+  user-select: none;
+  -webkit-user-drag: none;
+  transform-origin: 0 0;
+  transition: none;
+}
+
+.lightbox-zoom-controls {
+  position: absolute;
+  bottom: 90px;
+  right: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  z-index: 10;
+}
+
+.lightbox-zoom-btn {
+  width: 40px;
+  height: 40px;
+  border: none;
+  background: rgba(255, 255, 255, 0.12);
+  color: white;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+
+.lightbox-zoom-btn:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.lightbox-zoom-level {
+  color: rgba(255, 255, 255, 0.5);
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  text-align: center;
+  padding: 2px 0;
+}
+
+@media (max-width: 768px) {
+  .lightbox-zoom-controls { bottom: 80px; right: 12px; }
+  .lightbox-zoom-btn { width: 36px; height: 36px; }
+}
+
+.lightbox-counter {
+  position: relative;
+  z-index: 10;
+  margin-top: 16px;
+  color: rgba(255, 255, 255, 0.6);
+  font-family: var(--mono);
+  font-size: 0.85rem;
+}
+
+.lightbox-thumbs {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+  max-width: 90vw;
+  overflow-x: auto;
+  padding: 4px 0;
+}
+
+.lightbox-thumb {
+  width: 60px;
+  height: 42px;
+  border-radius: 6px;
+  object-fit: cover;
+  cursor: pointer;
+  opacity: 0.4;
+  border: 2px solid transparent;
+  transition: all var(--transition);
+  flex-shrink: 0;
+}
+
+.lightbox-thumb.active {
+  opacity: 1;
+  border-color: var(--accent);
+}
+
+.lightbox-thumb:hover {
+  opacity: 0.8;
+}
+
+@media (max-width: 768px) {
+  .lightbox-prev { left: 8px; width: 36px; height: 36px; font-size: 0.9rem; }
+  .lightbox-next { right: 8px; width: 36px; height: 36px; font-size: 0.9rem; }
+  .lightbox-thumbs { display: none; }
+}
+
 /* ========== Skills ========== */
 .skills-content {
   display: grid;
