@@ -35,6 +35,7 @@
           <li><a href="#projects" class="nav-link">Projects</a></li>
           <li><a href="#skills" class="nav-link">Skills</a></li>
           <li><a href="#certifications" class="nav-link">Certifications</a></li>
+          <li class="nav-activity"><a href="#activity" class="nav-link">Activity</a></li>
           <li><a href="#contact" class="nav-link">Contact</a></li>
         </ul>
       </nav>
@@ -713,11 +714,68 @@
     </div>
   </section>
 
+  <!-- GitHub Activity -->
+  <section id="activity" class="section">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-label mono">06. GitHub Activity</span>
+        <h2 class="section-title">Contribution History</h2>
+      </div>
+
+      <div class="activity-card reveal">
+        <div class="activity-header">
+          <div class="activity-title">
+            <i class="fab fa-github"></i>
+            <span>@Ahmed-1282</span>
+          </div>
+          <div class="activity-stats">
+            <div class="activity-stat">
+              <span class="activity-stat-value" id="gh-total">—</span>
+              <span class="activity-stat-label mono" id="gh-total-label">contributions</span>
+            </div>
+            <div class="activity-stat">
+              <span class="activity-stat-value" id="gh-years">—</span>
+              <span class="activity-stat-label mono">years on GitHub</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="activity-years-tabs" id="gh-year-tabs" role="tablist"></div>
+
+        <div class="activity-chart-wrap">
+          <div class="activity-months" id="gh-months"></div>
+          <div class="activity-grid-container">
+            <div class="activity-weekdays">
+              <span></span><span>Mon</span><span></span><span>Wed</span><span></span><span>Fri</span><span></span>
+            </div>
+            <div class="activity-grid" id="gh-grid" aria-label="GitHub contributions"></div>
+          </div>
+          <div class="activity-tooltip" id="gh-tooltip" role="tooltip"></div>
+        </div>
+
+        <div class="activity-legend">
+          <a href="https://github.com/Ahmed-1282" target="_blank" rel="noopener noreferrer" class="activity-profile-link mono">
+            View on GitHub <i class="fas fa-arrow-right"></i>
+          </a>
+          <div class="activity-scale">
+            <span class="mono">Less</span>
+            <span class="activity-cell" data-level="0"></span>
+            <span class="activity-cell" data-level="1"></span>
+            <span class="activity-cell" data-level="2"></span>
+            <span class="activity-cell" data-level="3"></span>
+            <span class="activity-cell" data-level="4"></span>
+            <span class="mono">More</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- Contact -->
   <section id="contact" class="section section-alt">
     <div class="container">
       <div class="section-header reveal">
-        <span class="section-label mono">06. Contact</span>
+        <span class="section-label mono">07. Contact</span>
         <h2 class="section-title">Get In Touch</h2>
       </div>
       <div class="contact-content reveal">
@@ -1107,6 +1165,161 @@
 
 
     });
+  </script>
+
+  <!-- GitHub Contributions Chart -->
+  <script>
+    (function() {
+      var USERNAME = "Ahmed-1282";
+      var API = "https://github-contributions-api.jogruber.de/v4/" + USERNAME + "?y=all";
+
+      var grid = document.getElementById("gh-grid");
+      var months = document.getElementById("gh-months");
+      var tabs = document.getElementById("gh-year-tabs");
+      var totalEl = document.getElementById("gh-total");
+      var yearsEl = document.getElementById("gh-years");
+      var tooltip = document.getElementById("gh-tooltip");
+
+      if (!grid) return;
+
+      function fmtNum(n) { return n.toLocaleString("en-US"); }
+
+      function fmtDate(iso) {
+        var d = new Date(iso + "T00:00:00");
+        return d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+      }
+
+      function showTooltip(e, contribs, iso) {
+        var txt = (contribs === 0 ? "No contributions" : contribs + " contribution" + (contribs === 1 ? "" : "s")) + " on " + fmtDate(iso);
+        tooltip.textContent = txt;
+        tooltip.classList.add("show");
+        var wrap = tooltip.offsetParent || tooltip.parentElement;
+        var wrapRect = wrap.getBoundingClientRect();
+        var cellRect = e.target.getBoundingClientRect();
+        tooltip.style.left = (cellRect.left - wrapRect.left + cellRect.width / 2) + "px";
+        tooltip.style.top = (cellRect.top - wrapRect.top) + "px";
+      }
+      function hideTooltip() { tooltip.classList.remove("show"); }
+
+      function renderYear(contributions) {
+        grid.innerHTML = "";
+        months.innerHTML = "";
+
+        if (!contributions.length) return;
+
+        var first = new Date(contributions[0].date + "T00:00:00");
+        var leadPad = first.getDay(); // 0=Sun
+        var totalCells = leadPad + contributions.length;
+        var totalWeeks = Math.ceil(totalCells / 7);
+
+        grid.style.setProperty("--weeks", totalWeeks);
+        grid.style.gridTemplateColumns = "repeat(" + totalWeeks + ", minmax(0, 1fr))";
+
+        for (var i = 0; i < leadPad; i++) {
+          var pad = document.createElement("span");
+          pad.className = "activity-cell";
+          pad.style.visibility = "hidden";
+          grid.appendChild(pad);
+        }
+
+        var monthLabels = [];
+        var prevMonth = -1;
+
+        contributions.forEach(function(day, idx) {
+          var d = new Date(day.date + "T00:00:00");
+          var absIdx = leadPad + idx;
+          var weekCol = Math.floor(absIdx / 7) + 1; // 1-based grid column
+
+          var cell = document.createElement("span");
+          cell.className = "activity-cell";
+          cell.setAttribute("data-level", day.level != null ? day.level : 0);
+          cell.setAttribute("data-count", day.count);
+          cell.setAttribute("data-date", day.date);
+          cell.addEventListener("mouseenter", function(e) { showTooltip(e, day.count, day.date); });
+          cell.addEventListener("mouseleave", hideTooltip);
+          grid.appendChild(cell);
+
+          var m = d.getMonth();
+          if (m !== prevMonth) {
+            // Record first week where this month appears; skip if too close to previous label
+            var last = monthLabels[monthLabels.length - 1];
+            if (!last || weekCol - last.col >= 3) {
+              monthLabels.push({ col: weekCol, name: d.toLocaleString("en-US", { month: "short" }) });
+            }
+            prevMonth = m;
+          }
+        });
+
+        var monthsInner = document.createElement("div");
+        monthsInner.className = "activity-months-inner";
+        monthsInner.style.gridTemplateColumns = "repeat(" + totalWeeks + ", minmax(0, 1fr))";
+        monthLabels.forEach(function(ml) {
+          var label = document.createElement("span");
+          label.textContent = ml.name;
+          label.style.gridColumn = ml.col;
+          monthsInner.appendChild(label);
+        });
+        months.appendChild(monthsInner);
+      }
+
+      function updateTotal(contribs) {
+        var sum = contribs.reduce(function(s, d) { return s + d.count; }, 0);
+        totalEl.textContent = fmtNum(sum);
+        var lbl = document.getElementById("gh-total-label");
+        if (lbl && contribs.length) {
+          lbl.textContent = "contributions in " + contribs[0].date.slice(0, 4);
+        }
+      }
+
+      function setActiveTab(year) {
+        Array.prototype.forEach.call(tabs.children, function(btn) {
+          btn.classList.toggle("active", btn.dataset.year === String(year));
+        });
+      }
+
+      fetch(API)
+        .then(function(r) { if (!r.ok) throw new Error("API " + r.status); return r.json(); })
+        .then(function(data) {
+          var byYear = {};
+          data.contributions.forEach(function(d) {
+            var y = d.date.slice(0, 4);
+            if (!byYear[y]) byYear[y] = [];
+            byYear[y].push(d);
+          });
+
+          var years = Object.keys(byYear).sort(function(a, b) { return b.localeCompare(a); });
+          var total = data.total && data.total.total != null
+            ? data.total.total
+            : data.contributions.reduce(function(s, d) { return s + d.count; }, 0);
+
+          totalEl.textContent = fmtNum(total);
+          yearsEl.textContent = years.length;
+
+          tabs.innerHTML = "";
+          years.forEach(function(y, i) {
+            var btn = document.createElement("button");
+            btn.className = "activity-year-tab" + (i === 0 ? " active" : "");
+            btn.dataset.year = y;
+            btn.textContent = y;
+            btn.addEventListener("click", function() {
+              setActiveTab(y);
+              renderYear(byYear[y]);
+              updateTotal(byYear[y]);
+            });
+            tabs.appendChild(btn);
+          });
+
+          if (years.length) {
+            renderYear(byYear[years[0]]);
+            updateTotal(byYear[years[0]]);
+          }
+        })
+        .catch(function(err) {
+          grid.innerHTML = '<span style="grid-column:1/-1;grid-row:1/-1;color:var(--text-muted);font-family:var(--mono);font-size:.8rem;padding:20px;">Unable to load contributions. <a href="https://github.com/' + USERNAME + '" target="_blank" style="color:var(--accent)">View on GitHub</a></span>';
+          totalEl.textContent = "—";
+          yearsEl.textContent = "—";
+        });
+    })();
   </script>
 </body>
 
