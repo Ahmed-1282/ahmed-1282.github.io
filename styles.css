@@ -264,6 +264,7 @@ header.scrolled {
   position: relative;
   padding-top: var(--header-height);
   overflow: hidden;
+  background: var(--bg-alt);
 }
 
 .hero::before {
