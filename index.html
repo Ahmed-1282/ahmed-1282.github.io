@@ -398,14 +398,38 @@
             <h3 class="project-title">Sugar Mill GIS</h3>
             <p class="project-subtitle">GIS-Powered Mill Management Platform</p>
             <p class="project-description">
-              Geospatial platform with PostGIS spatial queries for boundary analysis, overlap detection,
-              and harvest tracking. Serves 60K+ crop samples with disease/pest classification, RBAC
-              with multi-tenant mill isolation, and interactive WMS dashboards with circle-wise analytics.
+              Multi-service geospatial platform (mill backend + field survey service) with PostGIS spatial
+              queries for boundary analysis, overlap detection, and harvest tracking. Serves 60K+ crop samples
+              with disease/pest classification, RBAC with multi-tenant mill isolation, S3-backed survey image
+              uploads with EXIF geotagging, Excel/PDF reporting, and interactive WMS dashboards with
+              circle-wise analytics.
             </p>
             <div class="project-tech">
-              <span>NestJS</span><span>React</span><span>PostgreSQL</span><span>PostGIS</span><span>GeoServer</span><span>JWT</span><span>REST APIs</span>
+              <span>NestJS</span><span>TypeORM</span><span>Next.js</span><span>PostgreSQL</span><span>PostGIS</span><span>GeoServer</span><span>JWT</span><span>AWS S3</span>
             </div>
             <button class="btn-view-gallery"><i class="fas fa-images"></i> View Gallery</button>
+          </div>
+        </div>
+
+        <div class="project-card reveal">
+          <div class="project-card-inner">
+            <div class="project-top">
+              <i class="fas fa-folder-open project-icon"></i>
+              <div class="project-links">
+                <a href="https://re-monitoring-gis.bkk.ag/" target="_blank" rel="noopener noreferrer" aria-label="Live"><i class="fas fa-external-link-alt"></i></a>
+              </div>
+            </div>
+            <h3 class="project-title">Remote Crop Monitoring</h3>
+            <p class="project-subtitle">GIS-Powered Remote Sensing Dashboard</p>
+            <p class="project-description">
+              NestJS backend integrating GeoServer, NDVI satellite imagery, and real-time weather APIs
+              for precision agriculture, with automated E2E tests covering the API pipeline. Features JWT
+              auth, 3,000+ farmer records with pagination, and an interactive Next.js dashboard with
+              WMS/WFS map layers and farm health scoring.
+            </p>
+            <div class="project-tech">
+              <span>NestJS</span><span>TypeORM</span><span>Next.js</span><span>PostgreSQL</span><span>PostGIS</span><span>GeoServer</span><span>JWT</span>
+            </div>
           </div>
         </div>
 
