@@ -89,9 +89,19 @@
         <div class="hero-cta">
           <a href="#contact" class="btn btn-primary">Get In Touch</a>
           <a href="#projects" class="btn btn-outline">View My Work</a>
-          <a href="./Resume/Ahmed_Baig_FAST_CV.pdf" download="Ahmed Baig - Backend Engineer.pdf" class="btn btn-ghost">
-            <i class="fas fa-download"></i> Resume
-          </a>
+          <div class="resume-picker">
+            <button type="button" id="resume-trigger" class="btn btn-ghost" aria-haspopup="true" aria-expanded="false" aria-controls="resume-options">
+              <i class="fas fa-download"></i> Resume <i class="fas fa-chevron-down resume-caret"></i>
+            </button>
+            <div id="resume-options" class="resume-options" role="menu" aria-label="Choose a resume">
+              <a href="./Resume/Ahmed_Baig_Backend_CV.pdf" download="Ahmed Baig - Backend Engineer.pdf" class="resume-option" role="menuitem">
+                <i class="fas fa-server"></i> Backend Engineer
+              </a>
+              <a href="./Resume/Ahmed_Baig_FS_CV.pdf" download="Ahmed Baig - Full Stack Engineer.pdf" class="resume-option" role="menuitem">
+                <i class="fas fa-layer-group"></i> Full Stack Engineer
+              </a>
+            </div>
+          </div>
         </div>
         <div class="hero-links">
           <a href="https://github.com/Ahmed-1282" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><i class="fab fa-github"></i></a>
@@ -1039,6 +1049,31 @@
 
   <script>
     document.addEventListener("DOMContentLoaded", function () {
+
+      // --- Resume Picker (Backend / Full Stack) ---
+      const resumeTrigger = document.getElementById("resume-trigger");
+      const resumePicker = resumeTrigger ? resumeTrigger.closest(".resume-picker") : null;
+      if (resumeTrigger && resumePicker) {
+        const closeResume = () => {
+          resumePicker.classList.remove("open");
+          resumeTrigger.setAttribute("aria-expanded", "false");
+        };
+        resumeTrigger.addEventListener("click", function (e) {
+          e.stopPropagation();
+          const isOpen = resumePicker.classList.toggle("open");
+          resumeTrigger.setAttribute("aria-expanded", isOpen ? "true" : "false");
+        });
+        // Close after choosing, on outside click, or on Escape
+        resumePicker.querySelectorAll(".resume-option").forEach(opt => {
+          opt.addEventListener("click", closeResume);
+        });
+        document.addEventListener("click", function (e) {
+          if (!resumePicker.contains(e.target)) closeResume();
+        });
+        document.addEventListener("keydown", function (e) {
+          if (e.key === "Escape") closeResume();
+        });
+      }
 
       // --- Smooth Scrolling ---
       const headerHeight = () => document.getElementById("header").offsetHeight;
